@@ -2,6 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
+def normalize(vector):
+    magnitude = np.linalg.norm(vector)
+    return vector / magnitude
+
 def plot_vectors(vectors, colors, labels, title):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -32,6 +36,16 @@ def main():
     labels = ['Vector A (2, 1, -1)', 'Vector B (3, -1, 4)', 'A x B (Cross Product)']
     
     plot_vectors(vectors, colors, labels, "Vectors A, B, and Their Cross Product")
+    
+    #2
+    C_normalized = normalize(C)
+
+    vectors = [A, B, C, C_normalized]
+    colors = ['r', 'b', 'g', 'c']
+    labels = ['Vector A (2, 1, -1)', 'Vector B (3, -1, 4)', 'A x B (Cross Product)', 'Normalized Cross Product']
+
+    plot_vectors(vectors, colors, labels, "Vectors A, B, Cross Product, and Normalized Cross Product")
+
     
 if __name__ == "__main__":
     main()
