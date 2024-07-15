@@ -8,6 +8,13 @@
 </head>
 <body>
     <h1>3D Vector Plot</h1>
+    <div>
+        <label for="vectorA">Vector A:</label>
+        <input type="text" id="vectorA" value="2,1,-1">
+        <label for="vectorB">Vector B:</label>
+        <input type="text" id="vectorB" value="3,-1,4">
+        <button onclick="updateGraph()">Update Plot</button>
+    </div>
     <div id="plot" style="width: 100%; height: 80vh;"></div>
     <script type="text/javascript">
         function normalize(vector) {
@@ -15,42 +22,51 @@
             return vector.map(val => val / magnitude);
         }
 
-        const A = [2, 1, -1];
-        const B = [3, -1, 4];
+        function parseVector(input) {
+            return input.split(',').map(Number);
+        }
 
-        const C = [
-            A[1] * B[2] - A[2] * B[1],
-            A[2] * B[0] - A[0] * B[2],
-            A[0] * B[1] - A[1] * B[0]
-        ];
+        function updateGraph() {
 
-        const C_normalized = normalize(C);
+            const A = parseVector(document.getElementById('vectorA').value);
+            const B = parseVector(document.getElementById('vectorB').value);
 
-        const vectors = [A, B, C, C_normalized];
-        const colors = ['red', 'blue', 'green', 'cyan'];
-        const labels = ['Vector A (2, 1, -1)', 'Vector B (3, -1, 4)', 'A x B (Cross Product)', 'Normalized Cross Product'];
+            const C = [
+                A[1] * B[2] - A[2] * B[1],
+                A[2] * B[0] - A[0] * B[2],
+                A[0] * B[1] - A[1] * B[0]
+            ];
+    
+            const C_normalized = normalize(C);
+    
+            const vectors = [A, B, C, C_normalized];
+            const colors = ['red', 'blue', 'green', 'cyan'];
+            const labels = ['Vector A (2, 1, -1)', 'Vector B (3, -1, 4)', 'A x B (Cross Product)', 'Normalized Cross Product'];
+    
+            const data = vectors.map((vector, index) => ({
+                type: 'scatter3d',
+                x: [0, vector[0]],
+                y: [0, vector[1]],
+                z: [0, vector[2]],
+                mode: 'lines+markers',
+                marker: { size: 5, color: colors[index] },
+                line: { width: 10, color: colors[index] },
+                name: labels[index]
+            }));
+    
+            const layout = {
+                title: 'Vectors A, B, Cross Product, and Normalized Cross Product',
+                scene: {
+                    xaxis: { title: 'X axis' },
+                    yaxis: { title: 'Y axis' },
+                    zaxis: { title: 'Z axis' }
+                }
+            };
+    
+            Plotly.newPlot('plot', data, layout);
+        }
+        updateGraph();
 
-        const data = vectors.map((vector, index) => ({
-            type: 'scatter3d',
-            x: [0, vector[0]],
-            y: [0, vector[1]],
-            z: [0, vector[2]],
-            mode: 'lines+markers',
-            marker: { size: 5, color: colors[index] },
-            line: { width: 10, color: colors[index] },
-            name: labels[index]
-        }));
-
-        const layout = {
-            title: 'Vectors A, B, Cross Product, and Normalized Cross Product',
-            scene: {
-                xaxis: { title: 'X axis' },
-                yaxis: { title: 'Y axis' },
-                zaxis: { title: 'Z axis' }
-            }
-        };
-
-        Plotly.newPlot('plot', data, layout);
     </script>
 </body>
 </html>
