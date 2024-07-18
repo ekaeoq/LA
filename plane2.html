@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parallel Planes and Points Visualization</title>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    #myPlot {
+      height: 80vh;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="myPlot"></div>
+
+  <script>
+    const width = 600;
+    const height = 400;
+
+    const plane1 = {
+      a: 2,
+      b: -3,
+      c: 6,
+      d: 8,
+    };
+
+    const pointA = [-4, 0];
+    const pointB = [0, 0];
+
+    function createPlaneTrace(plane) {
+      const x = [];
+      const y = [];
+      const z = [];
+      for (let i = -2; i <= 2; i++) {
+        for (let j = -2; j <= 2; j++) {
+          const zVal = (-plane.a * i - plane.b * j - plane.d) / plane.c;
+          x.push(i);
+          y.push(j);
+          z.push(zVal);
+        }
+      }
+
+      return {
+        x: x,
+        y: y,
+        z: z,
+        type: "mesh3d",
+        opacity: 0.2, 
+        colorscale: [[0, 'rgb(255, 222, 173)'], [1, 'rgb(173, 222, 255)']], 
+      };
+    }
+
+    const pointAZ = (-plane1.a * pointA[0] - plane1.b * pointA[1] - plane1.d) / plane1.c;
+    const pointBZ = (-plane1.a * pointB[0] - plane1.b * pointB[1] - plane1.d) / plane1.c;
+
+    const plane1Trace = createPlaneTrace(plane1);
+    const pointATrace = {
+      x: [pointA[0]],
+      y: [pointA[1]],
+      z: [pointAZ], 
+      mode: "markers",
+      marker: { size: 15, color: "red" }, 
+      name: "Point A",
+    };
+    const pointBTrace = {
+      x: [pointB[0]],
+      y: [pointB[1]],
+      z: [pointBZ], 
+      mode: "markers",
+      marker: { size: 15, color: "blue" }, 
+      name: "Point B",
+    };
+
+    const data = [plane1Trace, pointATrace, pointBTrace];
+
+    const layout = {
+      title: "Parallel Planes and Points",
+      scene: {
+        xaxis: { title: "X" },
+        yaxis: { title: "Y" },
+        zaxis: { title: "Z" },
+        aspectmode: "auto",
+      },
+    };
+
+    Plotly.newPlot("myPlot", data, layout, { width, height });
+  </script>
+</body>
+</html>
