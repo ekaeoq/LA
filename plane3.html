@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Planes and Points Visualization with Plotly</title>
+  <!-- Include Plotly.js -->
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    #plotly-plot {
+      width: 100%;
+      height: 100%;
+      max-width: 800px;
+      max-height: 600px;
+    }
+  </style>
+</head>
+<body>
+  <div id="plotly-plot"></div>
+  <script>
+    // Define the planes
+    const plane1 = {
+      x: [-10, 10, 10, -10],
+      y: [-10, -10, 10, 10],
+      z: [[2*(-10) - 3*(-10) + 6*10 + 8, 2*10 - 3*(-10) + 6*10 + 8], [2*(-10) - 3*10 + 6*(-10) + 8, 2*10 - 3*10 + 6*(-10) + 8]],
+      opacity: 0.6,
+      type: 'surface',
+      showscale: false,
+      colorscale: [[0, 'rgb(255, 0, 0)'], [1, 'rgb(255, 0, 0)']],
+      name: 'Plane 1'
+    };
+    
+    const plane2 = {
+      x: [-10, 10, 10, -10],
+      y: [-10, -10, 10, 10],
+      z: [[2*(-10) - 3*(-10) + 6*10 - 6, 2*10 - 3*(-10) + 6*10 - 6], [2*(-10) - 3*10 + 6*(-10) - 6, 2*10 - 3*10 + 6*(-10) - 6]],
+      opacity: 0.6,
+      type: 'surface',
+      showscale: false,
+      colorscale: [[0, 'rgb(0, 0, 255)'], [1, 'rgb(0, 0, 255)']],
+      name: 'Plane 2'
+    };
+
+    // Define the points
+    const points = [
+      {
+        x: [-4],
+        y: [0],
+        z: [0],
+        mode: 'markers',
+        marker: {
+          size: 8,
+          color: 'rgb(0, 255, 0)',
+          symbol: 'circle'
+        },
+        type: 'scatter3d',
+        name: 'Point 1'
+      },
+      {
+        x: [0],
+        y: [0],
+        z: [1],
+        mode: 'markers',
+        marker: {
+          size: 8,
+          color: 'rgb(255, 255, 0)',
+          symbol: 'circle'
+        },
+        type: 'scatter3d',
+        name: 'Point 2'
+      }
+    ];
+
+    // Set up layout for the 3D plot
+    const layout = {
+      margin: { l: 0, r: 0, b: 0, t: 0 },
+      scene: {
+        aspectmode: 'cube',
+        xaxis: { title: 'X' },
+        yaxis: { title: 'Y' },
+        zaxis: { title: 'Z' }
+      },
+      showlegend: true,
+      legend: {
+        x: 0.9,
+        y: 0.9
+      }
+    };
+
+    // Combine planes and points data
+    const data = [plane1, plane2, ...points];
+
+    // Render the plot
+    Plotly.newPlot('plotly-plot', data, layout, { responsive: true });
+  </script>
+</body>
+</html>
